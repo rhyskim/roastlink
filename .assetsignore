@@ -1,0 +1,12 @@
+# Cloudflare Workers static-assets deploy (wrangler deploy) scans the
+# entire repo checkout by default -- without this file it was uploading
+# .git/ internals (config, objects, logs) and Wrangler's own build-time
+# scratch files as if they were public site content (found 2026-09-01,
+# first deploy). Nothing sensitive was in .git/config (just the public
+# GitHub remote URL), but none of this belongs on the live site.
+.git
+.wrangler
+_build
+wrangler.jsonc
+.gitignore
+.assetsignore
