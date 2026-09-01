@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoastLink</title>
+<script>
+(function () {
+  var lang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+  var target = "/en/";
+  if (lang.indexOf("ko") === 0) {
+    target = "/ko/";
+  } else if (lang.indexOf("zh") === 0) {
+    target = "/zh/";
+  }
+  location.replace(target);
+})();
+</script>
+</head>
+<body>
+<noscript>
+  <p>
+    <a href="/ko/">한국어</a> ·
+    <a href="/en/">English</a> ·
+    <a href="/zh/">中文</a>
+  </p>
+</noscript>
+</body>
+</html>
