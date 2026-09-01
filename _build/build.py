@@ -35,17 +35,19 @@ LANGUAGES = ["ko", "en", "zh"]
 # breaks, it just doesn't save anything yet.
 FORMSPREE_ENDPOINT = "https://formspree.io/f/xjyvyglv"
 
-# M-github-pages (2026-09-01): rhyskim.github.io (the root-domain slot) is
-# already someone else's -- er, this same account's -- pre-existing personal
-# Jekyll site, so this project is served from a project-repo subpath
-# (rhyskim.github.io/roastlink/) instead of the domain root. Every
-# internal absolute link (nav, lang switch, the stylesheet, and every
-# in-content <a href="/..."> in content/*.html) is prefixed with this one
-# constant via the $base_path template variable -- see build()'s
-# Template(...).safe_substitute() over the loaded fragment. Swapping to a
-# custom domain later (already on TODO.md) is then a one-line change:
-# set this to "" and rebuild, no content edits needed.
-BASE_PATH = "/roastlink"
+# M-hosting-move (2026-09-01): briefly deployed to rhyskim.github.io/roastlink/
+# (a GitHub Pages project-repo subpath) -- reverted the same day, because
+# rhyskim.github.io is this account's pre-existing personal site and even
+# a same-domain subpath was unwanted. RoastLink now deploys to its own
+# separate domain (Cloudflare Pages, roastlink.pages.dev -- no relation to
+# any github.io domain), which serves from the root, so this goes back to
+# "". Every internal absolute link (nav, lang switch, the stylesheet, and
+# every in-content <a href="/..."> in content/*.html) still goes through
+# this one constant via the $base_path template variable -- see build()'s
+# Template(...).safe_substitute() over the loaded fragment -- so switching
+# hosts again later, or adding a custom domain, is still just this one
+# line plus a rebuild.
+BASE_PATH = ""
 
 # Shared layout chrome (nav labels, footer, tagline) per language. Page
 # BODY content lives in content/<lang>/<slug>.html instead (or falls back
