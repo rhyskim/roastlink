@@ -22,7 +22,30 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">이 페이지는 아직 준비 중입니다.</p>
+<h1>2단계 — 포트 설정</h1>
+<p>RoastLink가 실행 중인 위치(포트)를 Artisan에게 알려주는 단계입니다.</p>
+
+<ol class="step-list">
+  <li>Artisan 메뉴에서 <strong>설정 → 시리얼 포트 설정 → WebSocket 탭</strong>을 엽니다.
+    (Network 탭이 아니라 반드시 <strong>WebSocket</strong> 탭입니다.)</li>
+  <li><strong>Host</strong>: <code>localhost</code></li>
+  <li><strong>Port</strong>: RoastLink 프로그램 화면에 표시된 포트 번호(기본값 8080)</li>
+  <li><strong>Data Request</strong>: <code>getData</code></li>
+  <li><strong>Input 1의 Node</strong>: <code>BT</code>, <strong>Input 2의 Node</strong>: <code>ET</code></li>
+  <li>두 Input의 <strong>Mode</strong>: <code>C</code> (섭씨)</li>
+</ol>
+
+<div class="callout callout-warning">
+  <strong>중요:</strong> "Messages" 항목의 <strong>CHARGE / DROP 입력칸은 반드시
+  비워두세요.</strong> 여기에 값이 남아있으면(예: 예전 설정의 잔여값) 배출 시 냉각이
+  제대로 걸리지 않을 수 있습니다.
+</div>
+
+<div class="step-nav">
+  <a href="/ko/guide/01-device/">← 이전: 장치 설정</a>
+  <a href="/ko/guide/03-sampling/">다음: 샘플링 →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

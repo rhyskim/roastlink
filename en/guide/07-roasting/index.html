@@ -22,7 +22,37 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">This page is still being written.</p>
+<h1>Roasting Walkthrough</h1>
+<p>Once setup is done, here's the actual sequence for a real roast.</p>
+
+<ol class="step-list">
+  <li><strong>Launch RoastLink → scan for your roaster → connect</strong></li>
+  <li><strong>Check/adjust the preheat target temperature</strong> in RoastLink's settings panel</li>
+  <li><strong>Turn Artisan ON</strong> (WebSocket connects) — confirm temperature appears on screen</li>
+  <li>Click <strong>START</strong> (begin preheat) — when the target is reached, RoastLink
+    shows an on-screen alert and plays a sound</li>
+  <li>Click <strong>CHARGE</strong> — load the beans; the burner/air/drum sliders now
+    actually take effect</li>
+  <li>During the roast, <strong>adjust burner/air/drum with the sliders</strong>; mark
+    first crack etc. using Artisan's own event-marking feature</li>
+  <li>Click <strong>DROP</strong> — a popup confirms cooling has started. Check within
+    10 seconds that the fan actually sounds louder</li>
+  <li>Cooling stops automatically when finished, or click <strong>COOL END</strong> to
+    finish manually</li>
+  <li>View/save your roast record using Artisan's own graph/save features</li>
+</ol>
+
+<div class="callout">
+  If the fan doesn't sound louder within 10 seconds of dropping, press "Stop Cooling" in
+  RoastLink, then slowly press <strong>OFF → START → DROP</strong> in Artisan, 3 seconds
+  apart. See the <a href="/en/faq/">FAQ</a> for more detail.
+</div>
+
+<div class="step-nav">
+  <a href="/en/guide/06-quantifiers/">← Previous: Disable Quantifiers</a>
+  <a href="/en/faq/">View FAQ →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

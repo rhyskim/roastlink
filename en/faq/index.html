@@ -22,7 +22,44 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">This page is still being written.</p>
+<h1>Frequently Asked Questions</h1>
+
+<div class="faq-item">
+  <h3>I moved only one slider, but burner, air, and drum all moved together.</h3>
+  <p>Artisan's <a href="/en/guide/06-quantifiers/">"Quantifiers" setting</a> is turned on.
+  Follow Step 6 of the setup guide to disable it.</p>
+</div>
+
+<div class="faq-item">
+  <h3>No temperature shows up on screen at all.</h3>
+  <p>Check that Input 1/2's Node (BT/ET) and Mode (C) aren't empty in Artisan's WebSocket
+  settings — see <a href="/en/guide/02-port/">Step 2: Port</a>.</p>
+</div>
+
+<div class="faq-item">
+  <h3>I dropped, but cooling doesn't kick in — the fan doesn't get louder.</h3>
+  <p>First press <strong>"Stop Cooling"</strong> in RoastLink, then slowly press
+  <strong>OFF → START → DROP</strong> in Artisan, 3 seconds apart. If that still doesn't
+  work, the safest option is to power the roaster off and back on directly.</p>
+</div>
+
+<div class="faq-item">
+  <h3>A "Connection was lost" popup appeared.</h3>
+  <p>RoastLink couldn't confirm a response from the roaster. Check that Bluetooth is on
+  and the roaster is powered on. If needed, restart the roaster and reconnect.</p>
+</div>
+
+<div class="faq-item">
+  <h3>The Sampling dialog has no field to enter a command.</h3>
+  <p>That's normal. RoastLink refreshes the temperature automatically, so no command
+  needs to be entered in this dialog.</p>
+</div>
+
+<div class="faq-item">
+  <h3>What port number should I use?</h3>
+  <p>Use exactly the port number shown in the RoastLink window (default 8080).</p>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

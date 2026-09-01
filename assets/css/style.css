@@ -111,3 +111,152 @@ a:hover {
   background: var(--color-accent-hover);
   color: #fff;
 }
+.btn-secondary {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+.btn-secondary:hover {
+  background: var(--color-surface);
+  color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Content typography */
+.page-content h2 {
+  margin-top: 2.2em;
+  padding-top: 0.4em;
+  border-top: 1px solid var(--color-border);
+}
+.page-content code {
+  background: #f0ece4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "SFMono-Regular", Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #f0ece4;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.badge-beta {
+  background: #fdf1d8;
+  color: #8a6d1a;
+}
+
+/* Callout boxes */
+.callout {
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-surface);
+  padding: 12px 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.callout strong {
+  color: var(--color-accent);
+}
+.callout-warning {
+  border-left-color: #b3261e;
+  background: #fdf1ef;
+}
+.callout-warning strong {
+  color: #b3261e;
+}
+
+/* Hero (home page) */
+.hero {
+  text-align: center;
+  padding: 32px 0 48px;
+}
+.hero h1 {
+  font-size: 2.1rem;
+  margin-bottom: 8px;
+}
+.hero p.tagline {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin-top: 0;
+}
+.hero .actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 32px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.feature-list li {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.feature-list li strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Guide table of contents / steps */
+.guide-toc {
+  list-style: none;
+  padding: 0;
+}
+.guide-toc li {
+  margin-bottom: 10px;
+}
+.guide-toc a {
+  font-size: 1.05rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+.guide-toc p {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Command tables (guide pages) */
+.cmd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+.cmd-table th,
+.cmd-table td {
+  border: 1px solid var(--color-border);
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.92rem;
+}
+.cmd-table th {
+  background: var(--color-surface);
+}
+
+/* FAQ */
+.faq-item {
+  margin-bottom: 28px;
+}
+.faq-item h3 {
+  margin-bottom: 6px;
+}

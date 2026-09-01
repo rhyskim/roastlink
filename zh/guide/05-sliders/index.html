@@ -22,7 +22,33 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">此页面正在编写中。</p>
+<h1>第5步 — 滑块</h1>
+<p>这一步设置控制火力、风门、滚筒的滑块。</p>
+
+<ol class="step-list">
+  <li>在 Artisan 中打开 <strong>Config → Events → Sliders</strong> 标签页。</li>
+  <li>按下表填写每个滑块的 <strong>WebSocket Command</strong>、最小/最大值和步进（Step）。</li>
+</ol>
+
+<table class="cmd-table">
+  <thead><tr><th>滑块</th><th>WebSocket Command</th><th>最小～最大</th><th>步进</th></tr></thead>
+  <tbody>
+    <tr><td>Air（风门）</td><td><code>send({{ "pushMessage": "DRAW {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+    <tr><td>Drum（滚筒）</td><td><code>send({{ "pushMessage": "DRUM {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+    <tr><td>Burner（火力）</td><td><code>send({{ "pushMessage": "HEAT {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <strong>步进（Step）必须设置为 5。</strong>如果设置为 1，即使滑块只移动一点点，也会
+  更频繁、更快速地发送命令，可能导致与烘焙机的通信不稳定。
+</div>
+
+<div class="step-nav">
+  <a href="/zh/guide/04-events/">← 上一步：事件按钮</a>
+  <a href="/zh/guide/06-quantifiers/">下一步：关闭量化器 →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

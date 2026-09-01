@@ -1,0 +1,23 @@
+<h1>Step 2 — Port</h1>
+<p>This step tells Artisan where RoastLink is running.</p>
+
+<ol class="step-list">
+  <li>In Artisan, open <strong>Config → Port → WebSocket tab</strong>.
+    (Not the Network tab — it must be the <strong>WebSocket</strong> tab.)</li>
+  <li><strong>Host</strong>: <code>localhost</code></li>
+  <li><strong>Port</strong>: the port number shown in the RoastLink window (default 8080)</li>
+  <li><strong>Data Request</strong>: <code>getData</code></li>
+  <li><strong>Input 1 Node</strong>: <code>BT</code>, <strong>Input 2 Node</strong>: <code>ET</code></li>
+  <li><strong>Mode</strong> for both inputs: <code>C</code> (Celsius)</li>
+</ol>
+
+<div class="callout callout-warning">
+  <strong>Important:</strong> under "Messages", the <strong>CHARGE / DROP fields must be
+  left empty.</strong> A leftover value here (e.g. from an old config) can prevent
+  cooling from actually starting when you drop.
+</div>
+
+<div class="step-nav">
+  <a href="/en/guide/01-device/">← Previous: Device</a>
+  <a href="/en/guide/03-sampling/">Next: Sampling →</a>
+</div>

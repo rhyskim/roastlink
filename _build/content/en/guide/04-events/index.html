@@ -1,0 +1,30 @@
+<h1>Step 4 — Event Buttons</h1>
+<p>This step wires up the buttons for starting preheat, charging, and dropping.</p>
+
+<ol class="step-list">
+  <li>In Artisan, open <strong>Config → Events → Config</strong> tab.</li>
+  <li>For each of the 5 buttons below, paste the value from the table into its
+    <strong>WebSocket Command</strong> field.</li>
+</ol>
+
+<table class="cmd-table">
+  <thead><tr><th>Button</th><th>WebSocket Command</th></tr></thead>
+  <tbody>
+    <tr><td>START (begin preheat)</td><td><code>send({ "pushMessage": "PREHEAT" })</code></td></tr>
+    <tr><td>CHARGE</td><td><code>send({ "pushMessage": "HSTART" })</code></td></tr>
+    <tr><td>DROP</td><td><code>send({ "pushMessage": "DROP" })</code></td></tr>
+    <tr><td>OFF</td><td><code>send({ "pushMessage": "OFF" })</code></td></tr>
+    <tr><td>COOL END</td><td><code>send({ "pushMessage": "COOLING_STOP" })</code></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  These values aren't sent directly to the roaster — RoastLink understands them and
+  translates them into the correct, safe sequence internally. Just paste them exactly
+  as shown.
+</div>
+
+<div class="step-nav">
+  <a href="/en/guide/03-sampling/">← Previous: Sampling</a>
+  <a href="/en/guide/05-sliders/">Next: Sliders →</a>
+</div>

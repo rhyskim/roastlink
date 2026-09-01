@@ -22,7 +22,35 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">This page is still being written.</p>
+<h1>Step 5 — Sliders</h1>
+<p>This step wires up the sliders that control burner, air, and drum.</p>
+
+<ol class="step-list">
+  <li>In Artisan, open <strong>Config → Events → Sliders</strong> tab.</li>
+  <li>For each slider below, enter its <strong>WebSocket Command</strong>, min/max, and
+    step exactly as shown.</li>
+</ol>
+
+<table class="cmd-table">
+  <thead><tr><th>Slider</th><th>WebSocket Command</th><th>Min–Max</th><th>Step</th></tr></thead>
+  <tbody>
+    <tr><td>Air</td><td><code>send({{ "pushMessage": "DRAW {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+    <tr><td>Drum</td><td><code>send({{ "pushMessage": "DRUM {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+    <tr><td>Burner</td><td><code>send({{ "pushMessage": "HEAT {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <strong>Step must be set to 5.</strong> Setting it to 1 means even a small slider
+  movement sends far more commands, much faster, which can make the connection to the
+  roaster unstable.
+</div>
+
+<div class="step-nav">
+  <a href="/en/guide/04-events/">← Previous: Event Buttons</a>
+  <a href="/en/guide/06-quantifiers/">Next: Disable Quantifiers →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

@@ -22,7 +22,33 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">此页面正在编写中。</p>
+<h1>第6步 — 关闭量化器（Quantifiers） <span class="badge">必须</span></h1>
+
+<div class="callout callout-warning">
+  <strong>跳过这一步会导致严重问题：只移动一个滑块，火力、风门、滚筒会全部跳到相同的
+  数值。</strong>请务必完成这一步。
+</div>
+
+<ol class="step-list">
+  <li>在 Artisan 中打开 <strong>Config → Events → Quantifiers</strong> 标签页
+    （与第5步是同一个对话框中的另一个标签页）。</li>
+  <li>将 <strong>Air、Drum、Burner</strong> 三行最左侧的事件复选框
+    <strong>全部取消勾选</strong>。</li>
+  <li>点击 Apply，然后 OK 保存。</li>
+  <li>重新打开该对话框，确认复选框确实保持未勾选状态。</li>
+</ol>
+
+<div class="callout">
+  这个功能原本用于"根据温度自动驱动滑块"，但并不适合这台烘焙机，必须关闭。
+  <strong>仅在 Config 标签页取消勾选一个"Quantifiers"复选框是不够的</strong> —
+  必须在这个 [Quantifiers] 标签页中逐项关闭。
+</div>
+
+<div class="step-nav">
+  <a href="/zh/guide/05-sliders/">← 上一步：滑块</a>
+  <a href="/zh/guide/07-roasting/">下一步：烘焙实操流程 →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>

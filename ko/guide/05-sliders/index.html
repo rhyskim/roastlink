@@ -22,7 +22,34 @@
   </div>
 </header>
 <main class="page-content">
-<p class="placeholder">이 페이지는 아직 준비 중입니다.</p>
+<h1>5단계 — 슬라이더</h1>
+<p>화력·공기·드럼을 조절하는 슬라이더를 연결하는 단계입니다.</p>
+
+<ol class="step-list">
+  <li>Artisan 메뉴에서 <strong>설정 → 이벤트 → 슬라이더(Sliders)</strong> 탭을 엽니다.</li>
+  <li>아래 표대로 각 슬라이더의 <strong>WebSocket Command</strong>, 최저/최고, 눈금
+    간격(Step)을 입력합니다.</li>
+</ol>
+
+<table class="cmd-table">
+  <thead><tr><th>슬라이더</th><th>WebSocket Command</th><th>최저~최고</th><th>눈금간격</th></tr></thead>
+  <tbody>
+    <tr><td>Air (공기)</td><td><code>send({{ "pushMessage": "DRAW {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+    <tr><td>Drum (드럼)</td><td><code>send({{ "pushMessage": "DRUM {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+    <tr><td>Burner (화력)</td><td><code>send({{ "pushMessage": "HEAT {}" }})</code></td><td>0 ~ 100</td><td>5</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <strong>눈금 간격(Step)은 반드시 5로 설정하세요.</strong> 1로 설정하면 슬라이더를 살짝만
+  움직여도 명령이 훨씬 더 많이, 빠르게 전송돼 로스터기와의 통신이 불안정해질 수 있습니다.
+</div>
+
+<div class="step-nav">
+  <a href="/ko/guide/04-events/">← 이전: 이벤트 버튼</a>
+  <a href="/ko/guide/06-quantifiers/">다음: 구간표시들 끄기 →</a>
+</div>
+
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>
