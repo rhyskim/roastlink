@@ -33,7 +33,7 @@ LANGUAGES = ["ko", "en", "zh"]
 # answers with a 404 for this placeholder ID, which the widget already
 # shows as a plain error message (see feedback_error below) -- nothing
 # breaks, it just doesn't save anything yet.
-FORMSPREE_ENDPOINT = "https://formspree.io/f/__REPLACE_ME__"
+FORMSPREE_ENDPOINT = "https://formspree.io/f/xjyvyglv"
 
 # Shared layout chrome (nav labels, footer, tagline) per language. Page
 # BODY content lives in content/<lang>/<slug>.html instead (or falls back
