@@ -1,11 +1,20 @@
+/* Palette (2026-09-01): Roaster Flame / Warm Amber / Deep Espresso, chosen
+   by the user over the three AI-neutral-avoiding directions that were
+   pitched (see the "roastlink-palettes" design artifact) -- deliberately
+   dark-first as the site's one fixed look (no light/dark toggle, that's a
+   separate later TODO), replacing the earlier cream+sienna palette that
+   read as generically AI-generated. */
 :root {
-  --color-bg: #faf7f2;
-  --color-surface: #ffffff;
-  --color-text: #2b2420;
-  --color-text-muted: #6b6058;
-  --color-accent: #a0522d;
-  --color-accent-hover: #7c3f22;
-  --color-border: #e8e0d6;
+  --color-bg: #121212;           /* Deep Espresso */
+  --color-surface: #1e1e1e;      /* Carbon Grey -- code blocks, cards, setup-guide areas */
+  --color-text: #e0e0e0;         /* Soft Chalk */
+  --color-text-muted: #9a9a9a;
+  --color-accent: #ff6b35;       /* Roaster Flame -- primary buttons, chart/link accents */
+  --color-accent-hover: #ff8659;
+  --color-secondary: #ffb703;    /* Warm Amber -- status tags (Beta badge, version, live status) */
+  --color-warning: #ff5449;
+  --color-warning-bg: rgba(255, 84, 73, 0.12);
+  --color-border: #2e2e2e;
   --max-width: 880px;
 }
 
@@ -129,7 +138,8 @@ a:hover {
   border-top: 1px solid var(--color-border);
 }
 .page-content code {
-  background: #f0ece4;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: "SFMono-Regular", Consolas, "Courier New", monospace;
@@ -139,7 +149,8 @@ a:hover {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 999px;
-  background: #f0ece4;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   color: var(--color-text-muted);
   font-size: 0.8rem;
   font-weight: 600;
@@ -147,8 +158,9 @@ a:hover {
   vertical-align: middle;
 }
 .badge-beta {
-  background: #fdf1d8;
-  color: #8a6d1a;
+  background: rgba(255, 183, 3, 0.14);
+  border-color: rgba(255, 183, 3, 0.4);
+  color: var(--color-secondary);
 }
 
 /* Step-number badge (guide page headings only, e.g. "1단계"/"Step 1"/"第1步") */
@@ -181,11 +193,11 @@ a:hover {
   color: var(--color-accent);
 }
 .callout-warning {
-  border-left-color: #b3261e;
-  background: #fdf1ef;
+  border-left-color: var(--color-warning);
+  background: var(--color-warning-bg);
 }
 .callout-warning strong {
-  color: #b3261e;
+  color: var(--color-warning);
 }
 
 /* Hero (home page) */
@@ -351,7 +363,7 @@ a:hover {
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 18px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 .feedback-form label {
@@ -366,9 +378,14 @@ a:hover {
   font-family: inherit;
   font-size: 0.95rem;
   padding: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   margin-bottom: 10px;
+}
+.feedback-form textarea::placeholder {
+  color: var(--color-text-muted);
 }
 .feedback-form .btn {
   width: 100%;
