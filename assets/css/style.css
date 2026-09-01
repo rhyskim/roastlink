@@ -164,6 +164,11 @@ a:hover {
   vertical-align: middle;
 }
 
+.download-count {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
 /* Callout boxes */
 .callout {
   border-left: 4px solid var(--color-accent);

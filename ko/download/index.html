@@ -31,9 +31,25 @@
   (.exe)이라 다운로드 후 바로 실행하시면 됩니다.
 </div>
 
-<p>
+<p style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
   <a class="btn" href="https://github.com/rhyskim/roastlink/releases/latest/download/RoastLink-windows.zip">최신 버전 다운로드</a>
+  <span id="download-count" class="download-count" hidden></span>
 </p>
+<script>
+(function () {
+  var el = document.getElementById('download-count');
+  if (!el) return;
+  fetch('https://api.github.com/repos/rhyskim/roastlink/releases/latest')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var asset = data && data.assets && data.assets.find(function (a) { return a.name === 'RoastLink-windows.zip'; });
+      if (!asset) return;
+      el.textContent = '누적 다운로드 ' + asset.download_count.toLocaleString() + '회';
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
 
 <div class="callout callout-warning">
   <strong>실행 시 "Windows에서 PC를 보호했습니다" 경고가 뜰 수 있습니다.</strong>

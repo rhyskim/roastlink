@@ -6,9 +6,25 @@
   需要支持蓝牙的 Windows 电脑。这不是安装程序，下载 .exe 文件后直接运行即可。
 </div>
 
-<p>
+<p style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
   <a class="btn" href="https://github.com/rhyskim/roastlink/releases/latest/download/RoastLink-windows.zip">下载最新版本</a>
+  <span id="download-count" class="download-count" hidden></span>
 </p>
+<script>
+(function () {
+  var el = document.getElementById('download-count');
+  if (!el) return;
+  fetch('https://api.github.com/repos/rhyskim/roastlink/releases/latest')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var asset = data && data.assets && data.assets.find(function (a) { return a.name === 'RoastLink-windows.zip'; });
+      if (!asset) return;
+      el.textContent = '累计下载 ' + asset.download_count.toLocaleString() + ' 次';
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
 
 <div class="callout callout-warning">
   <strong>运行时可能会出现"Windows 已保护你的电脑"的提示。</strong>

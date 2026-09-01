@@ -7,9 +7,25 @@
   the .exe and run it directly.
 </div>
 
-<p>
+<p style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
   <a class="btn" href="https://github.com/rhyskim/roastlink/releases/latest/download/RoastLink-windows.zip">Download latest version</a>
+  <span id="download-count" class="download-count" hidden></span>
 </p>
+<script>
+(function () {
+  var el = document.getElementById('download-count');
+  if (!el) return;
+  fetch('https://api.github.com/repos/rhyskim/roastlink/releases/latest')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var asset = data && data.assets && data.assets.find(function (a) { return a.name === 'RoastLink-windows.zip'; });
+      if (!asset) return;
+      el.textContent = asset.download_count.toLocaleString() + ' downloads so far';
+      el.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
 
 <div class="callout callout-warning">
   <strong>Windows may show a "Windows protected your PC" warning when you run it.</strong>
