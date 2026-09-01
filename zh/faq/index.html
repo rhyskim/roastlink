@@ -24,44 +24,118 @@
 <main class="page-content">
 <h1>常见问题</h1>
 
-<div class="faq-item">
-  <h3>我只移动了一个滑块，但火力、风门、滚筒全部一起动了。</h3>
-  <p>这是因为 Artisan 的<a href="/zh/guide/06-quantifiers/">"Quantifiers（量化器）"设置</a>
-  被打开了。请按照设置指南第6步将其关闭。</p>
-</div>
+<div class="faq-list">
+  <div class="faq-item">
+    <h3>我只移动了一个滑块，但火力、风门、滚筒全部一起动了。</h3>
+    <p>这是因为 Artisan 的<a href="/zh/guide/#quantifiers">"Quantifiers（量化器）"设置</a>
+    被打开了。请按照设置指南第6步将其关闭。</p>
+  </div>
 
-<div class="faq-item">
-  <h3>界面上完全不显示温度。</h3>
-  <p>请检查 Artisan 的 WebSocket 设置中，Input 1/2 的 Node（BT/ET）和 Mode（C）是否为空 —
-  参见<a href="/zh/guide/02-port/">第2步：端口设置</a>。</p>
-</div>
+  <div class="faq-item">
+    <h3>界面上完全不显示温度。</h3>
+    <p>请检查 Artisan 的 WebSocket 设置中，Input 1/2 的 Node（BT/ET）和 Mode（C）是否为空 —
+    参见<a href="/zh/guide/#port">第2步：端口设置</a>。</p>
+  </div>
 
-<div class="faq-item">
-  <h3>下豆后冷却没有启动，风扇声音没有变大。</h3>
-  <p>请先在 RoastLink 中点击<strong>"Stop Cooling（停止冷却）"</strong>按钮，然后在
-  Artisan 中按 <strong>OFF → START → DROP</strong> 的顺序、每隔 3 秒缓慢地重新点击一次。
-  如果仍然无效，最安全的做法是直接关闭并重新打开烘焙机电源。</p>
-</div>
+  <div class="faq-item">
+    <h3>下豆后冷却没有启动，风扇声音没有变大。</h3>
+    <p>请先在 RoastLink 中点击<strong>"Stop Cooling（停止冷却）"</strong>按钮，然后在
+    Artisan 中按 <strong>OFF → START → DROP</strong> 的顺序、每隔 3 秒缓慢地重新点击
+    一次。如果仍然无效，最安全的做法是直接关闭并重新打开烘焙机电源。</p>
+  </div>
 
-<div class="faq-item">
-  <h3>弹出了"连接已断开"的提示。</h3>
-  <p>这表示 RoastLink 未能确认烘焙机的响应。请检查蓝牙是否开启、烘焙机电源是否打开。
-  如有需要，请重启烘焙机后重新连接。</p>
-</div>
+  <div class="faq-item">
+    <h3>弹出了"连接已断开"的提示。</h3>
+    <p>这表示 RoastLink 未能确认烘焙机的响应。请检查蓝牙是否开启、烘焙机电源是否打开。
+    如有需要，请重启烘焙机后重新连接。</p>
+  </div>
 
-<div class="faq-item">
-  <h3>采样设置窗口里没有输入命令的地方。</h3>
-  <p>这是正常的。RoastLink 会自动刷新温度，因此这个窗口不需要额外输入任何命令。</p>
-</div>
+  <div class="faq-item">
+    <h3>采样设置窗口里没有输入命令的地方。</h3>
+    <p>这是正常的。RoastLink 会自动刷新温度，因此这个窗口不需要额外输入任何命令。</p>
+  </div>
 
-<div class="faq-item">
-  <h3>端口号应该填什么？</h3>
-  <p>请填写 RoastLink 窗口中显示的端口号（默认 8080）。</p>
+  <div class="faq-item">
+    <h3>端口号应该填什么？</h3>
+    <p>请填写 RoastLink 窗口中显示的端口号（默认 8080）。</p>
+  </div>
 </div>
 
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>
 </footer>
+
+<div class="feedback-widget">
+  <form class="feedback-form" id="feedback-form" action="https://formspree.io/f/__REPLACE_ME__" method="POST"
+        data-thanks="谢谢！留言已成功送出。" data-error="发送失败，请稍后再试。">
+    <label for="feedback-message">想对开发者说点什么！</label>
+    <textarea id="feedback-message" name="message" rows="5" placeholder="无论是需要修正的地方、希望增加的功能，还是一句鼓励的话，都请写在这里！我会认真阅读每一条留言！"></textarea>
+    <button type="submit" class="btn">发送</button>
+    <p class="feedback-status" hidden></p>
+  </form>
+</div>
+
+<script>
+(function () {
+  // Feedback widget: AJAX submit (Formspree supports Accept: application/json)
+  // so sending feedback never navigates the visitor away from whatever page
+  // they were reading.
+  var form = document.getElementById('feedback-form');
+  if (form) {
+    var feedbackTextarea = form.querySelector('#feedback-message');
+    if (feedbackTextarea) {
+      feedbackTextarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      });
+    }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = form.querySelector('.feedback-status');
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        status.hidden = false;
+        status.textContent = res.ok ? form.dataset.thanks : form.dataset.error;
+        if (res.ok) {
+          form.reset();
+        }
+      }).catch(function () {
+        status.hidden = false;
+        status.textContent = form.dataset.error;
+      });
+    });
+  }
+
+  // Guide page sticky table of contents: highlight whichever section is
+  // currently in view, Notion-style. A no-op on any page without a
+  // ".guide-toc-sticky" (querySelectorAll just returns an empty list), so
+  // this can live in the shared template without a per-page conditional.
+  var tocLinks = document.querySelectorAll('.guide-toc-sticky a');
+  var sections = document.querySelectorAll('.guide-body section[id]');
+  if (tocLinks.length && sections.length) {
+    var setActive = function (id) {
+      tocLinks.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id);
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(function (s) {
+      observer.observe(s);
+    });
+  }
+})();
+</script>
 </body>
 </html>

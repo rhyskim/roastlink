@@ -22,25 +22,258 @@
   </div>
 </header>
 <main class="page-content">
-<h1>Setup Guide</h1>
-<p>Follow these steps in Artisan, in order, to connect it to RoastLink. The order
-matters, so please go through them one at a time.</p>
+<div class="guide-layout">
+  <div class="guide-body">
+    <h1>Setup Guide</h1>
+    <p>Follow these steps in Artisan, in order, to connect it to RoastLink. The order
+    matters, so please go through them one at a time.</p>
 
-<ol class="guide-toc">
-  <li><a href="/en/guide/01-device/">Step 1 — Device</a><p>Tell Artisan where to read temperature from.</p></li>
-  <li><a href="/en/guide/02-port/">Step 2 — Port</a><p>Connect Artisan to RoastLink's address.</p></li>
-  <li><a href="/en/guide/03-sampling/">Step 3 — Sampling</a><p>Decide how often to check the temperature.</p></li>
-  <li><a href="/en/guide/04-events/">Step 4 — Event Buttons</a><p>Wire up the preheat/charge/drop buttons.</p></li>
-  <li><a href="/en/guide/05-sliders/">Step 5 — Sliders</a><p>Wire up the burner/air/drum control sliders.</p></li>
-  <li><a href="/en/guide/06-quantifiers/">Step 6 — Disable Quantifiers <span class="badge">Required</span></a><p>Skip this and your sliders will move on their own.</p></li>
-  <li><a href="/en/guide/07-roasting/">Roasting Walkthrough</a><p>The actual sequence from preheat to drop.</p></li>
-</ol>
+    <div class="callout">
+      <strong>You don't have to type the command values below by hand.</strong> Launch
+      RoastLink and click the <strong>"Open Artisan Setup Guide"</strong> button — every
+      value needed for Steps 3–5 has a <strong>[Copy]</strong> button next to it, so you
+      can paste it straight into Artisan. (Short numeric values like the port number
+      have no copy button — just read them off the screen and type them in.)
+      <!-- TODO: insert a screenshot showing where the "Open Artisan Setup Guide"
+           button is in RoastLink, and the [Copy] button inside that window -->
+    </div>
 
-<p>Once everything above is set up, move on to the <a href="/en/guide/07-roasting/">Roasting Walkthrough</a>.</p>
+    <section id="device">
+      <h2><span class="step-badge">Step 1</span> Device</h2>
+      <p>This step tells Artisan where its temperature readings come from.</p>
+      <ol class="step-list">
+        <li>In Artisan, open <strong>Config → Device</strong> (shortcut <code>Ctrl+D</code>).
+          (Depending on your Artisan version, this may be labeled differently.)</li>
+        <li>Set <strong>Meter</strong> to <code>WebSocket</code>.</li>
+        <li>Under <strong>Curves</strong>, check both <code>ET</code> and <code>BT</code>.</li>
+        <li>Under <strong>LCDs</strong>, check both <code>ET</code> and <code>BT</code> as well.</li>
+      </ol>
+      <div class="callout">
+        This dialog's exact name can vary by Artisan version/language — the key thing is
+        setting <strong>Meter to WebSocket</strong>.
+      </div>
+    </section>
+
+    <section id="port">
+      <h2><span class="step-badge">Step 2</span> Port</h2>
+      <p>This step tells Artisan where RoastLink is running.</p>
+      <ol class="step-list">
+        <li>In Artisan, open <strong>Config → Port → WebSocket tab</strong>.
+          (Not the Network tab — it must be the <strong>WebSocket</strong> tab.)</li>
+        <li><strong>Host</strong>: <code>localhost</code></li>
+        <li><strong>Port</strong>: the port number shown in the RoastLink window (default 8080)</li>
+        <li><strong>Data Request</strong>: <code>getData</code></li>
+        <li><strong>Input 1 Node</strong>: <code>BT</code>, <strong>Input 2 Node</strong>: <code>ET</code></li>
+        <li><strong>Mode</strong> for both inputs: <code>C</code> (Celsius)</li>
+      </ol>
+      <div class="callout callout-warning">
+        <strong>Important:</strong> under "Messages", the <strong>CHARGE / DROP fields must
+        be left empty.</strong> A leftover value here (e.g. from an old config) can prevent
+        cooling from actually starting when you drop.
+      </div>
+    </section>
+
+    <section id="sampling">
+      <h2><span class="step-badge">Step 3</span> Sampling</h2>
+      <p>A quick step to decide how often Artisan checks the temperature.</p>
+      <ol class="step-list">
+        <li>In Artisan, open <strong>Config → Sampling</strong>.</li>
+        <li>Set the interval to <code>2.00 secs</code>.</li>
+        <li>Check <strong>Keep ON</strong>.</li>
+        <li>Click OK.</li>
+      </ol>
+      <div class="callout">
+        It's normal for this dialog to have no command field. RoastLink refreshes the
+        temperature on its own whenever needed, so setting the interval and Keep ON here
+        is all this step requires.
+      </div>
+    </section>
+
+    <section id="events">
+      <h2><span class="step-badge">Step 4</span> Event Buttons</h2>
+      <p>This step wires up the buttons for starting preheat, charging, and dropping.</p>
+      <ol class="step-list">
+        <li>In Artisan, open <strong>Config → Events → Config</strong> tab.</li>
+        <li>For each of the 5 buttons below, paste the value from the table into its
+          <strong>WebSocket Command</strong> field.</li>
+      </ol>
+      <table class="cmd-table">
+        <thead><tr><th>Button</th><th>WebSocket Command</th></tr></thead>
+        <tbody>
+          <tr><td>START (begin preheat)</td><td><code>send({ "pushMessage": "PREHEAT" })</code></td></tr>
+          <tr><td>CHARGE</td><td><code>send({ "pushMessage": "HSTART" })</code></td></tr>
+          <tr><td>DROP</td><td><code>send({ "pushMessage": "DROP" })</code></td></tr>
+          <tr><td>OFF</td><td><code>send({ "pushMessage": "OFF" })</code></td></tr>
+          <tr><td>COOL END</td><td><code>send({ "pushMessage": "COOLING_STOP" })</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        These values aren't sent directly to the roaster — RoastLink understands them and
+        translates them into the correct, safe sequence internally. Just paste them
+        exactly as shown.
+      </div>
+    </section>
+
+    <section id="sliders">
+      <h2><span class="step-badge">Step 5</span> Sliders</h2>
+      <p>This step wires up the sliders that control burner, air, and drum.</p>
+      <ol class="step-list">
+        <li>In Artisan, open <strong>Config → Events → Sliders</strong> tab.</li>
+        <li>For each slider below, enter its <strong>WebSocket Command</strong>, min/max,
+          and step exactly as shown.</li>
+      </ol>
+      <table class="cmd-table">
+        <thead><tr><th>Slider</th><th>WebSocket Command</th><th>Min–Max</th><th>Step</th></tr></thead>
+        <tbody>
+          <tr><td>Air</td><td><code>send({{ "pushMessage": "DRAW {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+          <tr><td>Drum</td><td><code>send({{ "pushMessage": "DRUM {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+          <tr><td>Burner</td><td><code>send({{ "pushMessage": "HEAT {}" }})</code></td><td>0 – 100</td><td>5</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-warning">
+        <strong>Step must be set to 5.</strong> Setting it to 1 means even a small slider
+        movement sends far more commands, much faster, which can make the connection to
+        the roaster unstable.
+      </div>
+    </section>
+
+    <section id="quantifiers">
+      <h2><span class="step-badge">Step 6</span> Disable Quantifiers <span class="badge">Required</span></h2>
+      <div class="callout callout-warning">
+        <strong>Skipping this step causes a serious problem: moving just one slider makes
+        burner, air, and drum all jump to the same value.</strong> Please don't skip it.
+      </div>
+      <ol class="step-list">
+        <li>In Artisan, open the <strong>Config → Events → Quantifiers</strong> tab (a tab
+          in the same dialog you opened in Step 5).</li>
+        <li>For all three rows — <strong>Air, Drum, Burner</strong> — uncheck the leftmost
+          event checkbox <strong>completely</strong>.</li>
+        <li>Apply, then OK to save.</li>
+        <li>Reopen the dialog once to confirm the checkboxes stayed unchecked.</li>
+      </ol>
+      <div class="callout">
+        This feature is meant to auto-drive a slider from a temperature reading, which
+        doesn't suit this roaster and must be turned off. <strong>Unchecking the single
+        "Quantifiers" checkbox on the Config tab is not enough</strong> — you must disable
+        each event individually here, on the Quantifiers tab.
+      </div>
+    </section>
+
+    <section id="roasting">
+      <h2>Roasting Walkthrough</h2>
+      <p>Once setup is done, here's the actual sequence for a real roast.</p>
+      <ol class="step-list">
+        <li><strong>Launch RoastLink → scan for your roaster → connect</strong></li>
+        <li><strong>Check/adjust the preheat target temperature</strong> in RoastLink's
+          settings panel</li>
+        <li><strong>Turn Artisan ON</strong> (WebSocket connects) — confirm temperature
+          appears on screen</li>
+        <li>Click <strong>START</strong> (begin preheat) — when the target is reached,
+          RoastLink shows an on-screen alert and plays a sound</li>
+        <li>Click <strong>CHARGE</strong> — load the beans; the burner/air/drum sliders now
+          actually take effect</li>
+        <li>During the roast, <strong>adjust burner/air/drum with the sliders</strong>;
+          mark first crack etc. using Artisan's own event-marking feature</li>
+        <li>Click <strong>DROP</strong> — a popup confirms cooling has started. Check
+          within 10 seconds that the fan actually sounds louder</li>
+        <li>Cooling stops automatically when finished, or click <strong>COOL END</strong>
+          to finish manually</li>
+        <li>View/save your roast record using Artisan's own graph/save features</li>
+      </ol>
+      <div class="callout">
+        If the fan doesn't sound louder within 10 seconds of dropping, press "Stop
+        Cooling" in RoastLink, then slowly press <strong>OFF → START → DROP</strong> in
+        Artisan, 3 seconds apart. See the <a href="/en/faq/">FAQ</a> for more detail.
+      </div>
+    </section>
+  </div>
+
+  <nav class="guide-toc-sticky">
+    <a href="#device">1. Device</a>
+    <a href="#port">2. Port</a>
+    <a href="#sampling">3. Sampling</a>
+    <a href="#events">4. Event Buttons</a>
+    <a href="#sliders">5. Sliders</a>
+    <a href="#quantifiers">6. Disable Quantifiers</a>
+    <a href="#roasting">Roasting Walkthrough</a>
+  </nav>
+</div>
 
 </main>
 <footer class="site-footer">
   <p>© 2026 RoastLink. All rights reserved.</p>
 </footer>
+
+<div class="feedback-widget">
+  <form class="feedback-form" id="feedback-form" action="https://formspree.io/f/__REPLACE_ME__" method="POST"
+        data-thanks="Thanks! Your message was sent." data-error="Something went wrong. Please try again in a moment.">
+    <label for="feedback-message">Talk to the developer!</label>
+    <textarea id="feedback-message" name="message" rows="5" placeholder="Anything you'd like the developer to hear -- bugs, feature ideas, or just a word of encouragement. It'll all be read!"></textarea>
+    <button type="submit" class="btn">Send</button>
+    <p class="feedback-status" hidden></p>
+  </form>
+</div>
+
+<script>
+(function () {
+  // Feedback widget: AJAX submit (Formspree supports Accept: application/json)
+  // so sending feedback never navigates the visitor away from whatever page
+  // they were reading.
+  var form = document.getElementById('feedback-form');
+  if (form) {
+    var feedbackTextarea = form.querySelector('#feedback-message');
+    if (feedbackTextarea) {
+      feedbackTextarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      });
+    }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = form.querySelector('.feedback-status');
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        status.hidden = false;
+        status.textContent = res.ok ? form.dataset.thanks : form.dataset.error;
+        if (res.ok) {
+          form.reset();
+        }
+      }).catch(function () {
+        status.hidden = false;
+        status.textContent = form.dataset.error;
+      });
+    });
+  }
+
+  // Guide page sticky table of contents: highlight whichever section is
+  // currently in view, Notion-style. A no-op on any page without a
+  // ".guide-toc-sticky" (querySelectorAll just returns an empty list), so
+  // this can live in the shared template without a per-page conditional.
+  var tocLinks = document.querySelectorAll('.guide-toc-sticky a');
+  var sections = document.querySelectorAll('.guide-body section[id]');
+  if (tocLinks.length && sections.length) {
+    var setActive = function (id) {
+      tocLinks.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          setActive(entry.target.id);
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(function (s) {
+      observer.observe(s);
+    });
+  }
+})();
+</script>
 </body>
 </html>

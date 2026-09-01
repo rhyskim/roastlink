@@ -26,6 +26,15 @@ CONTENT = HERE / "content"
 
 LANGUAGES = ["ko", "en", "zh"]
 
+# M-feedback-widget (2026-09-01, plan.md): real submissions don't work until
+# this is replaced with an actual Formspree form endpoint (formspree.io ->
+# sign up -> create a form -> paste its endpoint URL here). Until then the
+# widget renders and the AJAX submit handler runs fine, Formspree just
+# answers with a 404 for this placeholder ID, which the widget already
+# shows as a plain error message (see feedback_error below) -- nothing
+# breaks, it just doesn't save anything yet.
+FORMSPREE_ENDPOINT = "https://formspree.io/f/__REPLACE_ME__"
+
 # Shared layout chrome (nav labels, footer, tagline) per language. Page
 # BODY content lives in content/<lang>/<slug>.html instead (or falls back
 # to PLACEHOLDER_BODY below when that file doesn't exist yet) -- this
@@ -40,6 +49,14 @@ UI = {
         "nav_faq": "FAQ",
         "footer": "© 2026 RoastLink. All rights reserved.",
         "lang_name": "한국어",
+        "feedback_label": "개발자에게 말하고 싶습니다!",
+        "feedback_placeholder": (
+            "수정해야 할 사항이나 있으면 좋은 기능 등, 뭐든 개발자에게 말하고 싶은 "
+            "내용을 이곳에 적어주세요! 응원의 한 마디도 모두 읽겠습니다!"
+        ),
+        "feedback_submit": "보내기",
+        "feedback_thanks": "감사합니다! 잘 전달됐습니다.",
+        "feedback_error": "전송에 실패했습니다. 잠시 후 다시 시도해주세요.",
     },
     "en": {
         "site_name": "RoastLink",
@@ -50,6 +67,14 @@ UI = {
         "nav_faq": "FAQ",
         "footer": "© 2026 RoastLink. All rights reserved.",
         "lang_name": "English",
+        "feedback_label": "Talk to the developer!",
+        "feedback_placeholder": (
+            "Anything you'd like the developer to hear -- bugs, feature ideas, or just "
+            "a word of encouragement. It'll all be read!"
+        ),
+        "feedback_submit": "Send",
+        "feedback_thanks": "Thanks! Your message was sent.",
+        "feedback_error": "Something went wrong. Please try again in a moment.",
     },
     "zh": {
         "site_name": "RoastLink",
@@ -60,25 +85,30 @@ UI = {
         "nav_faq": "常见问题",
         "footer": "© 2026 RoastLink. All rights reserved.",
         "lang_name": "中文",
+        "feedback_label": "想对开发者说点什么！",
+        "feedback_placeholder": (
+            "无论是需要修正的地方、希望增加的功能，还是一句鼓励的话，都请写在这里！"
+            "我会认真阅读每一条留言！"
+        ),
+        "feedback_submit": "发送",
+        "feedback_thanks": "谢谢！留言已成功送出。",
+        "feedback_error": "发送失败，请稍后再试。",
     },
 }
 
 # (slug, {lang: page_title}) -- slug doubles as the content-fragment
 # filename (content/<lang>/<slug>.html) and, via slug_url(), the URL path.
-# Representative pattern: every guide step follows "guide/NN-name/index"
-# the same way 01-device does; add more the same way rather than a
-# special case per step.
+#
+# M-guide-single-page (2026-09-01, plan.md): the setup guide used to be one
+# page per step (guide/01-device/index ... guide/07-roasting/index) -- it's
+# now a single "guide/index" page whose content fragment holds all seven
+# steps as <section id="..."> blocks with a sticky, scroll-spied table of
+# contents (see base.html/style.css). Don't re-add per-step PAGES entries;
+# add new guide steps as another <section> inside content/<lang>/guide/index.html.
 PAGES: list[tuple[str, dict[str, str]]] = [
     ("index", {"ko": "홈", "en": "Home", "zh": "首页"}),
     ("download/index", {"ko": "다운로드", "en": "Download", "zh": "下载"}),
     ("guide/index", {"ko": "설정 가이드", "en": "Setup Guide", "zh": "设置指南"}),
-    ("guide/01-device/index", {"ko": "1단계 — 장치", "en": "Step 1 — Device", "zh": "第1步 — 设备"}),
-    ("guide/02-port/index", {"ko": "2단계 — 포트", "en": "Step 2 — Port", "zh": "第2步 — 端口"}),
-    ("guide/03-sampling/index", {"ko": "3단계 — 샘플링", "en": "Step 3 — Sampling", "zh": "第3步 — 采样"}),
-    ("guide/04-events/index", {"ko": "4단계 — 이벤트 버튼", "en": "Step 4 — Event Buttons", "zh": "第4步 — 事件按钮"}),
-    ("guide/05-sliders/index", {"ko": "5단계 — 슬라이더", "en": "Step 5 — Sliders", "zh": "第5步 — 滑块"}),
-    ("guide/06-quantifiers/index", {"ko": "6단계 — 구간표시들 끄기", "en": "Step 6 — Disable Quantifiers", "zh": "第6步 — 关闭量化器"}),
-    ("guide/07-roasting/index", {"ko": "로스팅 실전 절차", "en": "Roasting Walkthrough", "zh": "烘焙实操流程"}),
     ("faq/index", {"ko": "자주 묻는 질문", "en": "Frequently Asked Questions", "zh": "常见问题"}),
 ]
 
@@ -147,6 +177,12 @@ def build() -> None:
                 lang_switch=lang_switch_html(lang, slug),
                 content=body,
                 footer=u["footer"],
+                formspree_endpoint=FORMSPREE_ENDPOINT,
+                feedback_label=u["feedback_label"],
+                feedback_placeholder=u["feedback_placeholder"],
+                feedback_submit=u["feedback_submit"],
+                feedback_thanks=u["feedback_thanks"],
+                feedback_error=u["feedback_error"],
             )
             out_path = REPO_ROOT / lang / f"{slug}.html"
             out_path.parent.mkdir(parents=True, exist_ok=True)
