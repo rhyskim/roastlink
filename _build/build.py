@@ -35,6 +35,18 @@ LANGUAGES = ["ko", "en", "zh"]
 # breaks, it just doesn't save anything yet.
 FORMSPREE_ENDPOINT = "https://formspree.io/f/xjyvyglv"
 
+# M-github-pages (2026-09-01): rhyskim.github.io (the root-domain slot) is
+# already someone else's -- er, this same account's -- pre-existing personal
+# Jekyll site, so this project is served from a project-repo subpath
+# (rhyskim.github.io/roastlink/) instead of the domain root. Every
+# internal absolute link (nav, lang switch, the stylesheet, and every
+# in-content <a href="/..."> in content/*.html) is prefixed with this one
+# constant via the $base_path template variable -- see build()'s
+# Template(...).safe_substitute() over the loaded fragment. Swapping to a
+# custom domain later (already on TODO.md) is then a one-line change:
+# set this to "" and rebuild, no content edits needed.
+BASE_PATH = "/roastlink"
+
 # Shared layout chrome (nav labels, footer, tagline) per language. Page
 # BODY content lives in content/<lang>/<slug>.html instead (or falls back
 # to PLACEHOLDER_BODY below when that file doesn't exist yet) -- this
@@ -140,7 +152,7 @@ def nav_html(lang: str, active_slug: str) -> str:
     for key, label in entries:
         is_active = active_slug == key or active_slug.startswith(key + "/")
         cls = ' class="active"' if is_active else ""
-        href = f"/{lang}/" if key == "index" else f"/{lang}/{key}/"
+        href = f"{BASE_PATH}/{lang}/" if key == "index" else f"{BASE_PATH}/{lang}/{key}/"
         links.append(f'      <a href="{href}"{cls}>{label}</a>')
     return "\n".join(links)
 
@@ -150,7 +162,7 @@ def lang_switch_html(lang: str, slug: str) -> str:
     parts = []
     for candidate in LANGUAGES:
         cls = ' class="active"' if candidate == lang else ""
-        parts.append(f'<a href="/{candidate}/{path}"{cls}>{UI[candidate]["lang_name"]}</a>')
+        parts.append(f'<a href="{BASE_PATH}/{candidate}/{path}"{cls}>{UI[candidate]["lang_name"]}</a>')
     return " · ".join(parts)
 
 
@@ -167,7 +179,10 @@ def build() -> None:
     for lang in LANGUAGES:
         u = UI[lang]
         for slug, titles in PAGES:
-            body = load_fragment(lang, slug)
+            # $base_path in a content fragment (every in-content
+            # <a href="$base_path/..."> link) is resolved here, same as
+            # base.html's own $base_path below -- see BASE_PATH's comment.
+            body = Template(load_fragment(lang, slug)).safe_substitute(base_path=BASE_PATH)
             html = base.safe_substitute(
                 lang=lang,
                 title=f"{titles[lang]} — {u['site_name']}",
@@ -177,6 +192,7 @@ def build() -> None:
                 lang_switch=lang_switch_html(lang, slug),
                 content=body,
                 footer=u["footer"],
+                base_path=BASE_PATH,
                 formspree_endpoint=FORMSPREE_ENDPOINT,
                 feedback_label=u["feedback_label"],
                 feedback_placeholder=u["feedback_placeholder"],
