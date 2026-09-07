@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Static site generator for the RoastLink site (skeleton phase).
+"""Static site generator for the RoastLink site -- RETIRED 2026-09-08.
+
+Superseded by ../_build_java (a from-scratch Java port, same templates/
+content under this _build/ directory, same output paths -- verified to
+produce identical pages). Kept here as historical/dead code, not deleted,
+not run anymore; don't edit this to change the live site, edit the Java
+generator instead.
 
 Reads templates/base.html and, per page, an optional content fragment
 from content/<lang>/<slug>.html; writes the final static pages into the

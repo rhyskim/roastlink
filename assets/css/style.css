@@ -24,6 +24,11 @@
 
 body {
   margin: 0;
+  /* .hero-screenshot intentionally bleeds past .page-content on wide
+     screens; on very narrow ones the bleed can exceed the viewport, so
+     clip it here rather than let the whole page gain a horizontal
+     scrollbar over a few px of image overflow. */
+  overflow-x: hidden;
   font-family: -apple-system, "Segoe UI", "Pretendard", "Noto Sans KR", "Noto Sans SC", sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
@@ -220,6 +225,22 @@ a:hover {
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+}
+.hero-screenshot {
+  /* ~1.2x the feature-list width, bled symmetrically past .page-content.
+     Width and margin are both percentages of the same containing block,
+     which keeps the bleed exactly symmetric -- a vw-based version was
+     used before, but 100vw includes the scrollbar width in most browsers,
+     which made the image sit visibly off-center. */
+  width: 120%;
+  margin: 8px 0 32px -10%;
+}
+.hero-screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
 }
 .feature-list {
   list-style: none;

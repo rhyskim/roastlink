@@ -38,15 +38,19 @@
 (function () {
   var el = document.getElementById('download-count');
   if (!el) return;
-  fetch('https://api.github.com/repos/rhyskim/roastlink/releases/latest')
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (data) {
-      var asset = data && data.assets && data.assets.find(function (a) { return a.name === 'RoastLink-windows.zip'; });
-      if (!asset) return;
-      el.textContent = '累计下载 ' + asset.download_count.toLocaleString() + ' 次';
-      el.hidden = false;
-    })
-    .catch(function () {});
+  Promise.all([
+    fetch('https://api.github.com/repos/rhyskim/roastlink/releases/latest').then(function (r) { return r.ok ? r.json() : null; }),
+    fetch('/assets/download_count_offset.json').then(function (r) { return r.ok ? r.json() : null; })
+  ]).then(function (results) {
+    var release = results[0];
+    var offsetData = results[1];
+    var asset = release && release.assets && release.assets.find(function (a) { return a.name === 'RoastLink-windows.zip'; });
+    if (!asset) return;
+    var offset = (offsetData && offsetData.offset) || 0;
+    var total = offset + asset.download_count;
+    el.textContent = '累计下载 ' + total.toLocaleString() + ' 次';
+    el.hidden = false;
+  }).catch(function () {});
 })();
 </script>
 
