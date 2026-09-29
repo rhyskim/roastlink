@@ -38,18 +38,68 @@ public final class SiteBuilder {
     // constant if that ever changes.
     private static final String BASE_PATH = "";
 
+    // Absolute origin, needed for anything that can't be a relative link:
+    // sitemap.xml <loc>, canonical/hreflang <link> tags, and Open
+    // Graph/Twitter card URLs (both are read by crawlers/scrapers with no
+    // notion of "the current page" to resolve a relative URL against).
+    private static final String SITE_URL = "https://roastlink.rhyskim.workers.dev";
+
+    // "x-default" is the hreflang value crawlers fall back to for a
+    // visitor whose locale matches none of the declared alternates --
+    // English, as the most broadly understood of the three.
+    private static final String DEFAULT_LANG = "en";
+
     // Same public Formspree endpoint the live site ships in its HTML source
     // (form IDs are meant to be client-visible -- this isn't a secret).
     private static final String FORMSPREE_ENDPOINT = "https://formspree.io/f/xjyvyglv";
 
-    private record PageDef(String slug, Map<String, String> titles) {
+    private record PageDef(String slug, Map<String, String> titles, Map<String, String> descriptions) {
     }
 
+    // Descriptions are written for readers, not keyword-stuffed -- but
+    // each one naturally includes the actual terms a searcher would type
+    // (product name, "Sandbox Smart R1", "Artisan", "Bluetooth"/블루투스,
+    // "bridge"/브릿지, "download"/다운로드) rather than a generic sentence,
+    // since this is what Google actually reads for the search-result
+    // snippet (a separate <meta name="keywords"> tag is not -- Google has
+    // ignored it for ranking since 2009, so this repo doesn't add one).
     private static final List<PageDef> PAGES = List.of(
-            new PageDef("index", Map.of("ko", "홈", "en", "Home", "zh", "首页")),
-            new PageDef("download/index", Map.of("ko", "다운로드", "en", "Download", "zh", "下载")),
-            new PageDef("guide/index", Map.of("ko", "설정 가이드", "en", "Setup Guide", "zh", "设置指南")),
-            new PageDef("faq/index", Map.of("ko", "자주 묻는 질문", "en", "Frequently Asked Questions", "zh", "常见问题"))
+            new PageDef(
+                    "index",
+                    Map.of("ko", "홈", "en", "Home", "zh", "首页"),
+                    Map.of(
+                            "ko", "RoastLink는 Sandbox Smart R1 커피 로스터기를 블루투스로 Artisan 로스팅 소프트웨어와 연결하는 무료 브릿지 프로그램입니다. 복잡한 설정 없이 원클릭으로 연결하세요.",
+                            "en", "RoastLink connects your Sandbox Smart R1 coffee roaster to Artisan roasting software over Bluetooth -- a free, one-click bridge with no complicated setup.",
+                            "zh", "RoastLink 通过蓝牙将 Sandbox Smart R1 咖啡烘焙机连接到 Artisan 烘焙软件——免费、一键连接，无需复杂设置。"
+                    )
+            ),
+            new PageDef(
+                    "download/index",
+                    Map.of("ko", "다운로드", "en", "Download", "zh", "下载"),
+                    Map.of(
+                            "ko", "RoastLink Windows용 다운로드. Sandbox Smart R1과 Artisan을 연결하는 브릿지 프로그램을 무료로 받아보세요 -- 설치 없이 실행 파일 하나로 바로 사용 가능합니다.",
+                            "en", "Download RoastLink for Windows -- a free bridge connecting the Sandbox Smart R1 roaster to Artisan. No installer, just a single executable.",
+                            "zh", "下载 RoastLink Windows 版——免费连接 Sandbox Smart R1 烘焙机与 Artisan 的桥接程序，无需安装，单文件即可运行。"
+                    )
+            ),
+            new PageDef(
+                    "guide/index",
+                    Map.of("ko", "설정 가이드", "en", "Setup Guide", "zh", "设置指南"),
+                    Map.of(
+                            "ko", "Sandbox Smart R1 로스터기를 Artisan에 연결하는 설정 가이드. 블루투스 페어링부터 Artisan 웹소켓 설정까지 단계별로 안내합니다.",
+                            "en", "Step-by-step setup guide for connecting the Sandbox Smart R1 roaster to Artisan via RoastLink, from Bluetooth pairing to Artisan's WebSocket configuration.",
+                            "zh", "Sandbox Smart R1 烘焙机连接 Artisan 的设置指南，从蓝牙配对到 Artisan WebSocket 设置，逐步说明。"
+                    )
+            ),
+            new PageDef(
+                    "faq/index",
+                    Map.of("ko", "자주 묻는 질문", "en", "Frequently Asked Questions", "zh", "常见问题"),
+                    Map.of(
+                            "ko", "RoastLink와 Sandbox Smart R1, Artisan 연동에 대해 자주 묻는 질문과 답변을 모았습니다.",
+                            "en", "Frequently asked questions about RoastLink, the Sandbox Smart R1 roaster, and connecting to Artisan roasting software.",
+                            "zh", "关于 RoastLink、Sandbox Smart R1 烘焙机与 Artisan 连接的常见问题解答。"
+                    )
+            )
     );
 
     private static final Map<String, Map<String, String>> UI = buildUi();
@@ -107,6 +157,11 @@ public final class SiteBuilder {
                 values.put("footer", u.get("footer"));
                 values.put("base_path", BASE_PATH);
                 values.put("formspree_endpoint", FORMSPREE_ENDPOINT);
+                values.put("description", page.descriptions().get(lang));
+                values.put("canonical_url", canonicalUrl(lang, page.slug()));
+                values.put("hreflang_links", hreflangLinksHtml(page.slug()));
+                values.put("og_locale", ogLocale(lang));
+                values.put("og_image", SITE_URL + "/assets/img/use.png");
                 values.put("feedback_label", u.get("feedback_label"));
                 values.put("feedback_placeholder", u.get("feedback_placeholder"));
                 values.put("feedback_submit", u.get("feedback_submit"));
@@ -125,7 +180,81 @@ public final class SiteBuilder {
                 written++;
             }
         }
+        writeSitemap();
+        writeRobotsTxt();
         return written;
+    }
+
+    /**
+     * One &lt;url&gt; entry per (language x page) -- 12 total -- each
+     * cross-linked to its translations via xhtml:link, same information
+     * the per-page hreflang &lt;link&gt; tags carry, just in the format
+     * search engines expect a sitemap to repeat it in.
+     */
+    private void writeSitemap() throws IOException {
+        String today = java.time.LocalDate.now().toString();
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ")
+                .append("xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+        for (String lang : LANGUAGES) {
+            for (PageDef page : PAGES) {
+                xml.append("  <url>\n");
+                xml.append("    <loc>").append(canonicalUrl(lang, page.slug())).append("</loc>\n");
+                xml.append("    <lastmod>").append(today).append("</lastmod>\n");
+                for (String altLang : LANGUAGES) {
+                    xml.append("    <xhtml:link rel=\"alternate\" hreflang=\"").append(altLang)
+                            .append("\" href=\"").append(canonicalUrl(altLang, page.slug())).append("\"/>\n");
+                }
+                xml.append("    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"")
+                        .append(canonicalUrl(DEFAULT_LANG, page.slug())).append("\"/>\n");
+                xml.append("  </url>\n");
+            }
+        }
+        xml.append("</urlset>\n");
+        Files.writeString(repoRoot.resolve("sitemap.xml"), xml.toString(), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Overrides Cloudflare's own auto-injected default robots.txt (a
+     * generic "content signals" policy notice, not tailored to this
+     * site) by simply providing our own -- any file actually present in
+     * the deployed assets is served as-is instead. Points crawlers at
+     * the sitemap so they don't have to discover pages purely by
+     * following links.
+     */
+    private void writeRobotsTxt() throws IOException {
+        String robots = "User-agent: *\nAllow: /\n\nSitemap: " + SITE_URL + "/sitemap.xml\n";
+        Files.writeString(repoRoot.resolve("robots.txt"), robots, StandardCharsets.UTF_8);
+    }
+
+    private static String canonicalUrl(String lang, String slug) {
+        return SITE_URL + "/" + lang + "/" + slugUrl(slug);
+    }
+
+    /**
+     * One {@code <link rel="alternate" hreflang="...">} per language plus
+     * one {@code x-default} -- tells a search engine these pages are
+     * translations of each other rather than duplicate content, and
+     * which one to show a visitor whose locale matches none of them.
+     */
+    private static String hreflangLinksHtml(String slug) {
+        StringBuilder sb = new StringBuilder();
+        for (String lang : LANGUAGES) {
+            sb.append("<link rel=\"alternate\" hreflang=\"").append(lang).append("\" href=\"")
+                    .append(canonicalUrl(lang, slug)).append("\">\n");
+        }
+        sb.append("<link rel=\"alternate\" hreflang=\"x-default\" href=\"")
+                .append(canonicalUrl(DEFAULT_LANG, slug)).append("\">");
+        return sb.toString();
+    }
+
+    private static String ogLocale(String lang) {
+        return switch (lang) {
+            case "ko" -> "ko_KR";
+            case "zh" -> "zh_CN";
+            default -> "en_US";
+        };
     }
 
     /** "index" -> "", "download/index" -> "download/". */
