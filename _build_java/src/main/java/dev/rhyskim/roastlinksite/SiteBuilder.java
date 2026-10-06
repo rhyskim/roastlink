@@ -66,7 +66,7 @@ public final class SiteBuilder {
     private static final List<PageDef> PAGES = List.of(
             new PageDef(
                     "index",
-                    Map.of("ko", "홈", "en", "Home", "zh", "首页"),
+                    Map.of("ko", "Sandbox Smart R1 아티산(Artisan) 연동 브릿지", "en", "Sandbox Smart R1 to Artisan Bridge", "zh", "Sandbox Smart R1 与 Artisan 连接桥接程序"),
                     Map.of(
                             "ko", "RoastLink는 Sandbox Smart R1 커피 로스터기를 블루투스로 Artisan 로스팅 소프트웨어와 연결하는 무료 브릿지 프로그램입니다. 복잡한 설정 없이 원클릭으로 연결하세요.",
                             "en", "RoastLink connects your Sandbox Smart R1 coffee roaster to Artisan roasting software over Bluetooth -- a free, one-click bridge with no complicated setup.",
@@ -75,7 +75,7 @@ public final class SiteBuilder {
             ),
             new PageDef(
                     "download/index",
-                    Map.of("ko", "다운로드", "en", "Download", "zh", "下载"),
+                    Map.of("ko", "Sandbox Smart R1 Artisan 브릿지 무료 다운로드", "en", "Free Download: Sandbox Smart R1 Artisan Bridge", "zh", "免费下载 Sandbox Smart R1 Artisan 桥接程序"),
                     Map.of(
                             "ko", "RoastLink Windows용 다운로드. Sandbox Smart R1과 Artisan을 연결하는 브릿지 프로그램을 무료로 받아보세요 -- 설치 없이 실행 파일 하나로 바로 사용 가능합니다.",
                             "en", "Download RoastLink for Windows -- a free bridge connecting the Sandbox Smart R1 roaster to Artisan. No installer, just a single executable.",
@@ -84,7 +84,7 @@ public final class SiteBuilder {
             ),
             new PageDef(
                     "guide/index",
-                    Map.of("ko", "설정 가이드", "en", "Setup Guide", "zh", "设置指南"),
+                    Map.of("ko", "Sandbox Smart R1 Artisan 연결 설정 가이드", "en", "Sandbox Smart R1 Artisan Setup Guide", "zh", "Sandbox Smart R1 连接 Artisan 设置指南"),
                     Map.of(
                             "ko", "Sandbox Smart R1 로스터기를 Artisan에 연결하는 설정 가이드. 블루투스 페어링부터 Artisan 웹소켓 설정까지 단계별로 안내합니다.",
                             "en", "Step-by-step setup guide for connecting the Sandbox Smart R1 roaster to Artisan via RoastLink, from Bluetooth pairing to Artisan's WebSocket configuration.",
@@ -93,7 +93,7 @@ public final class SiteBuilder {
             ),
             new PageDef(
                     "faq/index",
-                    Map.of("ko", "자주 묻는 질문", "en", "Frequently Asked Questions", "zh", "常见问题"),
+                    Map.of("ko", "Sandbox Smart R1 Artisan 연동 자주 묻는 질문 (FAQ)", "en", "Sandbox Smart R1 Artisan FAQ", "zh", "Sandbox Smart R1 Artisan 常见问题"),
                     Map.of(
                             "ko", "RoastLink와 Sandbox Smart R1, Artisan 연동에 대해 자주 묻는 질문과 답변을 모았습니다.",
                             "en", "Frequently asked questions about RoastLink, the Sandbox Smart R1 roaster, and connecting to Artisan roasting software.",
